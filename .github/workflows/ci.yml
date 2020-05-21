@@ -1,9 +1,9 @@
 name: CI
 on:
   pull_request:
-    branches: [develop]
+    branches: [develop, master]
   push: #this works when we merge a branch into develop branch
-    branches: [develop]
+    branches: [develop, master]
 
 jobs:
   build:
@@ -43,7 +43,12 @@ jobs:
         with:
           name: build
           path: build
-
+      #create a release when event is push and we need to check that we are pushing into master branch
+      - name: Create a release
+        if: github.event_name == 'push' && github.refs == 'refs/heads/master'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - run: npm install -g surge ; we can install surge globally and use just surge, but we can use npx surge to
       ## we only would like to run this step if it's a push event not a pull request event
       - name: Deploy to Staging
