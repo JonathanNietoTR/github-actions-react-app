@@ -21,11 +21,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
             node-version: "12.x"
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm test -- --coverage
+      - run: npm ci #similar to npm i but it's more suitable for CI environments
+      - run: npm run format:check #check code fotrmatting
+      - run: npm test -- --coverage #run tests & generate coverage
         env:
-          CI: true
+          CI: true #enviroment variable
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v1
         with:
