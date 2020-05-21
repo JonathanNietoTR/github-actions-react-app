@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    ## take our surge credentials from github secrets
+    env:
+      SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       # Caching NPM Dependencies
@@ -59,9 +63,10 @@ jobs:
       # - run: npm install -g surge ; we can install surge globally and use just surge, but we can use npx surge to
       ## we only would like to run this step if it's a push event not a pull request event
       - name: Deploy to Staging
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: npx surge --project ./build --domain redundant-goose.surge.sh
-        ## take our surge credentials from github secrets
-        env:
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+      
+      ## we only would like to run this step if it's a push event not a pull request event
+      - name: Deploy to Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx surge --project ./build --domain tacit-kittens.surge.sh
