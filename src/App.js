@@ -10,7 +10,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <p>Deploy to Staging follow ci workflow.</p>
+        <p>Deploy to Production follow ci workflow.</p>
         <a
           className="App-link"
           href="https://reactjs.org"
