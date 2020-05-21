@@ -46,7 +46,7 @@ jobs:
           path: build
       #create a release when event is push and we need to check that we are pushing into master branch
       - name: Create a release
-        if: github.event_name == 'push' && github.refs == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
