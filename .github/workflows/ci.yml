@@ -24,6 +24,7 @@ jobs:
             node-version: "12.x"
       - run: npm ci #similar to npm i but it's more suitable for CI environments
       - run: npm run format:check #check code fotgenerate coverage
+      - run: npm test -- --coverage
         env:
           CI: true #enviroment variable
       # Uploading Artifacts using upload-artifact
