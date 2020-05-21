@@ -2,7 +2,7 @@ name: CI
 on:
   pull_request:
     branches: [develop]
-  push:
+  push: #this works when we merge a branch into develop branch
     branches: [develop]
 
 jobs:
@@ -22,8 +22,7 @@ jobs:
         with:
             node-version: "12.x"
       - run: npm ci #similar to npm i but it's more suitable for CI environments
-      - run: npm run format:check #check code fotrmatting
-      - run: npm test -- --coverage #run tests & generate coverage
+      - run: npm run format:check #check code fotgenerate coverage
         env:
           CI: true #enviroment variable
       - name: Upload Test Coverage
@@ -31,8 +30,9 @@ jobs:
         with:
           name: code-coverage
           path: coverage
+      ## we only would like to run this step if it's a push event not a pull request event
       - name: Build Project
-        if: github.event_name == 'push'
+        if: github.event_name == 'push'  #accessing github context
         run: npm run build
       - name: Upload Build Folder
         if: github.event_name == 'push'
@@ -40,10 +40,13 @@ jobs:
         with:
           name: build
           path: build
-      # - run: npm install -g surge
+
+          # - run: npm install -g surge ; we can install surge globally and use just surge, but we can use npx surge to
+      ## we only would like to run this step if it's a push event not a pull request event
       - name: Deploy to Staging
         if: github.event_name == 'push'
         run: npx surge --project ./build --domain redundant-goose.surge.sh
+        ## take our surge credentials from github secrets
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
