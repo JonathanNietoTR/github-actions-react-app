@@ -68,5 +68,5 @@ jobs:
       
       ## we only would like to run this step if it's a push event not a pull request event
       - name: Deploy to Production
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-      run: npx surge --project ./build --domain tacit-kittens.surge.sh
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx surge --project ./build --domain tacit-kittens.surge.sh
