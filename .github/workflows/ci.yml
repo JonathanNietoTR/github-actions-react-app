@@ -44,6 +44,12 @@ jobs:
         with:
           name: build
           path: build
+      #ZIP Assets when event is push and we need to check that we are pushing into master branch
+      - name: ZIP Assets
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          zip -r build.zip ./build
+          zip -r coverage.zip ./coverage
       #create a release when event is push and we need to check that we are pushing into master branch
       - name: Create a release
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
