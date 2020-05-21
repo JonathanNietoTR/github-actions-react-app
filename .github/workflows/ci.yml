@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # Caching NPM Dependencies
       - name: Cache node_modules
         uses: actions/cache@v1
         with:
@@ -25,6 +26,7 @@ jobs:
       - run: npm run format:check #check code fotgenerate coverage
         env:
           CI: true #enviroment variable
+      # Uploading Artifacts using upload-artifact
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v1
         with:
@@ -34,6 +36,7 @@ jobs:
       - name: Build Project
         if: github.event_name == 'push'  #accessing github context
         run: npm run build
+      # Uploading Artifacts using upload-artifact & we only would like to run this step if it's a push event not a pull request event
       - name: Upload Build Folder
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v1
@@ -41,7 +44,7 @@ jobs:
           name: build
           path: build
 
-          # - run: npm install -g surge ; we can install surge globally and use just surge, but we can use npx surge to
+      # - run: npm install -g surge ; we can install surge globally and use just surge, but we can use npx surge to
       ## we only would like to run this step if it's a push event not a pull request event
       - name: Deploy to Staging
         if: github.event_name == 'push'
